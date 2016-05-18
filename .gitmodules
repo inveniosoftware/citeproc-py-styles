@@ -1,0 +1,3 @@
+[submodule "citeproc_styles/styles"]
+	path = citeproc_styles/styles
+	url = https://github.com/citation-style-language/styles.git
