@@ -28,16 +28,18 @@ from __future__ import absolute_import, print_function
 
 import os
 import sys
-from xml.dom import pulldom
-from six import reraise as raise_
 
+from lxml.etree import iterparse
 from pkg_resources import resource_exists, resource_filename, resource_listdir
+from six import reraise as raise_
 
 from .errors import StyleDependencyError, StyleNotFoundError
 from .version import __version__
 
 independent_dir = 'styles'
 dependent_dir = 'styles/dependent'
+
+xml_namespace = "http://purl.org/net/xbiblio/csl"
 
 
 def _resolve_dependent_style(style_path):
@@ -60,15 +62,12 @@ def _resolve_dependent_style(style_path):
          <http://docs.citationstyles.org/en/stable/specification.html#file-types>`_
     """
     try:
-        dom_events = pulldom.parse(style_path)
-        for event, node in dom_events:
-            if (event == pulldom.START_ELEMENT and node.tagName == 'link'):
-                # The independent style is mentioned inside a link element of
-                # the form 'http://www.stylesite.com/stylename'.
-                if (node.hasAttribute('rel') and
-                        node.getAttribute('rel') == 'independent-parent'):
-                    url = node.getAttribute('href')
-                    return url.rsplit('/', 1)[1]
+        # The independent style is mentioned inside a link element of
+        # the form 'http://www.stylesite.com/stylename'.
+        for _, el in iterparse(style_path, tag='{%s}link' % xml_namespace):
+            if el.attrib.get('rel') == 'independent-parent':
+                url = el.attrib.get('href')
+                return url.rsplit('/', 1)[1]
     except Exception:
         # Invalid XML, missing info, etc. Preserve the original exception.
         stacktrace = sys.exc_info()[2]
@@ -119,12 +118,10 @@ def get_style_name(style):
     """
     try:
         filepath = get_style_filepath(style, resolve_dependencies=False)
-        dom_events = pulldom.parse(filepath)
-        for event, node in dom_events:
-            if event == pulldom.START_ELEMENT and node.tagName == 'title':
-                dom_events.expandNode(node)
-                title_text = node.childNodes[0]
-                return title_text.toxml()
+        for _, el in iterparse(filepath, tag='{%s}title' % xml_namespace):
+            return el.text
+        else:
+            return style
     except StyleNotFoundError:
         raise
     except Exception:
