@@ -54,6 +54,7 @@ setup_requires = [
 ]
 
 install_requires = [
+    'lxml>=3.6.0',
     'six>=1.10.0',
 ]
 
