@@ -75,7 +75,7 @@ setup(
     keywords='citeproc styles csl',
     license='GPLv2',
     author='CERN',
-    author_email='info@invenio-software.org',
+    author_email='info@inveniosoftware.org',
     url='https://github.com/inveniosoftware/citeproc-py-styles',
     packages=packages,
     zip_safe=False,
