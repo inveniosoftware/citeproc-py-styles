@@ -13,6 +13,7 @@ from __future__ import absolute_import, print_function
 import os
 
 import pytest
+
 from citeproc_styles import get_style_filepath, get_style_name
 from citeproc_styles.errors import StyleNotFoundError
 
