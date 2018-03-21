@@ -5,9 +5,10 @@
     citeproc-py-styles is free software; you can redistribute it and/or modify it
     under the terms of the MIT License; see LICENSE file for more details.
 
-Authors
-=======
+Contributors
+============
 
-citeproc-py-styles.
-
-- Alexander Ioannidis <a.ioannidis@cern.ch>
+- Alexander Ioannidis
+- Lars Holm Nielsen
+- Sebastian Witowski
+- Tibor Simko
