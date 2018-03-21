@@ -11,9 +11,7 @@ include *.sh
 include *.txt
 include .gitmodules
 include .editorconfig
-include .lgtm
 include LICENSE
-include MAINTAINERS
 prune citeproc_styles/styles
 recursive-include tests *.py
 recursive-include citeproc_styles/styles *.csl

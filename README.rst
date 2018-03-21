@@ -1,15 +1,16 @@
+..
+    This file is part of citeproc-py-styles.
+    Copyright (C) 2016-2018 CERN.
+
+    citeproc-py-styles is free software; you can redistribute it and/or modify it
+    under the terms of the MIT License; see LICENSE file for more details.
+
 ====================
  citeproc-py-styles
 ====================
 
-.. image:: https://img.shields.io/github/tag/inveniosoftware/citeproc-py-styles.svg
-        :target: https://github.com/inveniosoftware/citeproc-py-styles/releases
-
-.. image:: https://img.shields.io/pypi/dm/citeproc-py-styles.svg
-        :target: https://pypi.python.org/pypi/citeproc-py-styles
-
-.. image:: https://img.shields.io/github/license/inveniosoftware/citeproc-py-styles.svg
-        :target: https://github.com/inveniosoftware/citeproc-py-styles/blob/master/LICENSE
+.. image:: https://img.shields.io/pypi/v/citeproc-py-styles.svg
+        :target: https://pypi.org/pypi/citeproc-py-styles
 
 About
 =====
