@@ -9,6 +9,12 @@
  citeproc-py-styles
 ====================
 
+.. image:: https://img.shields.io/travis/inveniosoftware/citeproc-py-styles.svg
+        :target: https://travis-ci.org/inveniosoftware/citeproc-py-styles
+
+.. image:: https://img.shields.io/coveralls/inveniosoftware/citeproc-py-styles.svg
+        :target: https://coveralls.io/r/inveniosoftware/citeproc-py-styles
+
 .. image:: https://img.shields.io/pypi/v/citeproc-py-styles.svg
         :target: https://pypi.org/pypi/citeproc-py-styles
 
