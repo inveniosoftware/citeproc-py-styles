@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of citeproc-py-styles.
-# Copyright (C) 2016-2018 CERN.
+# Copyright (C) 2016-2019 CERN.
 #
 # citeproc-py-styles is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
-
 notifications:
   email: false
 
@@ -17,13 +16,16 @@ cache:
   - pip
 
 env:
-  - REQUIREMENTS=lowest
-  - REQUIREMENTS=release
-  - REQUIREMENTS=devel
+  matrix:
+    - REQUIREMENTS=lowest
+    - REQUIREMENTS=release
+    - REQUIREMENTS=devel
+  global:
+    secure: hNxkvOdRXDoUCjlYBG/dXX60L/DpyxyituyX9p8dIvTuxcJ3MbJKh529RLEXkOhS12v/BvuKdJa5fjs6gcnuiV7klSF2eYP0eeGe2Hl510IFdnqKWuW9RA3vW9htVNsq2zMk0xCnVixN0pWcFGLsaExFH3Ptc+IeEMcQqAArAvVdeUHVoE87AgEQsB5mfZef7xelFVj+FGvAP/3arsJyPd+0EZKJnjX7E2xA0LEJPL3H6eWvHRh8N8jdCaPmqFovZi37/avG+VEQxc0ILgE5W/QjMbsf30aTvCfchSPv8hukcrA4rPALhtLQ3+cxsFrznLL6/CnCc6gfCmcmmn5ff3LLpWIBoUN0e6pDtnHjrxCqQT9tK0eKHXODTxdow/b6DCJBKOcf2XJDIXY5qt3+5QTyZ4+xzIyrRdfN9ULHoafKXahiXcGCJL43X5wocIX5nSCYcVmexBFUORsv0z4YTjsDnWor5N4l4vJ4wRV30nIZZJXE4wFheqeYCWLL5+oe3u3urTFTw5hN3CEHBGURrXqOwYsoHifNwplbn8SN3JAKnv+WkOLtEwT6pKwZLdWy4+l2mMX/8TFsgyXg4s4t8WKI9Yeop1DE5dWlN1uvhXZ9PdRK3cUYmMGbVjEDEy3zDZf+Icf8nMr3sHSPaqCVgDJmzJXYK81EV2l67uJ5ZCw=
 
 python:
-  - "2.7"
-  - "3.5"
+  - '2.7'
+  - '3.5'
 
 matrix:
   fast_finish: true
@@ -31,29 +33,48 @@ matrix:
     - env: REQUIREMENTS=devel
 
 before_install:
-  - "travis_retry pip install --upgrade pip setuptools py"
-  - "travis_retry pip install twine wheel coveralls requirements-builder"
-  - "requirements-builder --level=min setup.py > .travis-lowest-requirements.txt"
-  - "requirements-builder --level=pypi setup.py > .travis-release-requirements.txt"
-  - "requirements-builder --level=dev --req requirements-devel.txt setup.py > .travis-devel-requirements.txt"
+  - travis_retry pip install --upgrade pip setuptools py
+  - travis_retry pip install twine wheel coveralls requirements-builder
+  - requirements-builder --level=min setup.py > .travis-lowest-requirements.txt
+  - requirements-builder --level=pypi setup.py > .travis-release-requirements.txt
+  - requirements-builder --level=dev --req requirements-devel.txt setup.py > .travis-devel-requirements.txt
 
 install:
-  - "travis_retry pip install -r .travis-${REQUIREMENTS}-requirements.txt"
-  - "travis_retry pip install -e .[all]"
+  - travis_retry pip install -r .travis-${REQUIREMENTS}-requirements.txt
+  - travis_retry pip install -e .[all]
 
 script:
-  - "./run-tests.sh"
+  - ./run-tests.sh
 
 after_success:
-- coveralls
+  - coveralls
 
-deploy:
-  provider: pypi
-  user: inveniosoftware
-  password:
-    secure: "WHvRhQUacZVfzdLKS6IsFn4+5fZB8+80nyrFLZgg5OApEf0/i+RC6UsKZCbHKOjUsUgiZgCChp6ipjW4HIWXrHpFh+sa6nbrVAkiCWyT8P9abEZs7rTtJ0Md5pjliF1D5Qc/vHCmVHkcxFw3GbRsDRkToW4EeXZX108y6vUw+ROQpSg3u9JWIzyO8hSOXaowSkFjhY+8TciEGMLN0rcUo2HIVZkW5TlsgDPUyYmE2MlTGsx86lDkeL5e2KqkZ3mwQZvjCDKkYEGmVXZihCkwdyePUrYfc1+amWAdb2yPVFPiNkrJKtJiFnPaBLHLdIwI4rYKcPtmVPWML7NZijRRewGoL+edmk0Mv2KGfDRsBKkXeFlOiu7Kpb6sTUXJbxTOL3/0DoPNxFoiSvJxIoX925ZqnLKqwNEA6FRl0rPrWJQhBzVQtZbKkLX1lUxhRBf+aW5+F6KCBk46vr8Ky+WeDNvDjPqni7DrOdKRUYRrKGyLcwkjskGY3ljH/Gsw0/trMUl5IyqENvPHuAbCqr1vJ6+oIfAcFNoJLezSq1jSkDlpspDCOOVlDp/H3NcjqTd04WsG7V6vWop66TSdZcQRSL0vQWNufYyyWYS0DPg2LN/FGFGnRBcZSPIwdLL7nMlOTo8nyPw/FBcxmyUxUMt54v1McKVb/h5OITJosvRanYk="
-  distributions: "sdist bdist_wheel"
-  on:
-    tags: true
-    python: "2.7"
-    condition: $REQUIREMENTS = release
+stages:
+  - name: update
+    if: type = cron
+  - name: test
+    if: type != cron
+  - name: deploy
+    if: tag IS present
+
+jobs:
+  include:
+  - stage: update
+    python: '3.5'
+    env: REQUIREMENTS=release
+    before_script: ./run-update.sh
+    after_success:
+      - git remote add origin-travis https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}
+      - git push origin-travis HEAD:$TRAVIS_BRANCH --follow-tags
+  - stage: deploy
+    python: '3.5'
+    env: REQUIREMENTS=release
+    deploy:
+      provider: pypi
+      user: inveniosoftware
+      password:
+        secure: WHvRhQUacZVfzdLKS6IsFn4+5fZB8+80nyrFLZgg5OApEf0/i+RC6UsKZCbHKOjUsUgiZgCChp6ipjW4HIWXrHpFh+sa6nbrVAkiCWyT8P9abEZs7rTtJ0Md5pjliF1D5Qc/vHCmVHkcxFw3GbRsDRkToW4EeXZX108y6vUw+ROQpSg3u9JWIzyO8hSOXaowSkFjhY+8TciEGMLN0rcUo2HIVZkW5TlsgDPUyYmE2MlTGsx86lDkeL5e2KqkZ3mwQZvjCDKkYEGmVXZihCkwdyePUrYfc1+amWAdb2yPVFPiNkrJKtJiFnPaBLHLdIwI4rYKcPtmVPWML7NZijRRewGoL+edmk0Mv2KGfDRsBKkXeFlOiu7Kpb6sTUXJbxTOL3/0DoPNxFoiSvJxIoX925ZqnLKqwNEA6FRl0rPrWJQhBzVQtZbKkLX1lUxhRBf+aW5+F6KCBk46vr8Ky+WeDNvDjPqni7DrOdKRUYRrKGyLcwkjskGY3ljH/Gsw0/trMUl5IyqENvPHuAbCqr1vJ6+oIfAcFNoJLezSq1jSkDlpspDCOOVlDp/H3NcjqTd04WsG7V6vWop66TSdZcQRSL0vQWNufYyyWYS0DPg2LN/FGFGnRBcZSPIwdLL7nMlOTo8nyPw/FBcxmyUxUMt54v1McKVb/h5OITJosvRanYk=
+      distributions: sdist bdist_wheel
+      on:
+        tags: true
+        repo: inveniosoftware/citeproc-py-styles
