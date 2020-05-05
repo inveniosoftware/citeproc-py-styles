@@ -37,7 +37,7 @@ setup_requires = [
 ]
 
 install_requires = [
-    'lxml>=3.6.0',
+    'lxml>=4.1.1',
     'six>=1.10.0',
 ]
 
@@ -75,12 +75,9 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Development Status :: 5 - Production/Stable',
     ]
 )
