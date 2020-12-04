@@ -7,6 +7,5 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 
 pydocstyle citeproc_styles && \
-isort -rc -c -df **/*.py && \
-check-manifest --ignore ".travis-*" && \
+check-manifest --ignore ".*-requirements.txt" && \
 python setup.py test

@@ -9,8 +9,8 @@
  citeproc-py-styles
 ====================
 
-.. image:: https://img.shields.io/travis/inveniosoftware/citeproc-py-styles.svg
-        :target: https://travis-ci.org/inveniosoftware/citeproc-py-styles
+.. image:: https://github.com/inveniosoftware/citeproc-py-styles/workflows/CI/badge.svg
+        :target: https://github.com/inveniosoftware/citeproc-py-styles/actions?query=workflow%3ACI
 
 .. image:: https://img.shields.io/coveralls/inveniosoftware/citeproc-py-styles.svg
         :target: https://coveralls.io/r/inveniosoftware/citeproc-py-styles
