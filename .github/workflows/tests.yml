@@ -35,6 +35,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Init GIT submodule
+        run: |
+          git submodule update --init --recursive
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -42,6 +46,7 @@ jobs:
 
       - name: Generate dependencies
         run: |
+          sudo apt-get install libxml2-dev libxslt1-dev
           python -m pip install --upgrade pip setuptools py wheel requirements-builder
           requirements-builder -e all --level=${{ matrix.requirements-level }} setup.py > .${{ matrix.requirements-level }}-${{ matrix.python-version }}-requirements.txt
 

@@ -20,6 +20,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Init GIT submodule
+        run: |
+          git submodule update --init --recursive
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
