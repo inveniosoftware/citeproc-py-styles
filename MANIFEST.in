@@ -12,8 +12,8 @@ include *.txt
 include .gitmodules
 include .editorconfig
 include LICENSE
+include pytest.ini
 prune citeproc_styles/styles
 recursive-include tests *.py
 recursive-include citeproc_styles/styles *.csl
 recursive-include .github/workflows *.yml
-recursive-include docs *.py
