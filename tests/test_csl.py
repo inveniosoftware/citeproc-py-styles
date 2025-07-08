@@ -14,7 +14,7 @@ import os
 
 import pytest
 
-from citeproc_styles import get_style_filepath, get_style_name
+from citeproc_styles import get_all_styles, get_style_filepath, get_style_name
 from citeproc_styles.errors import StyleNotFoundError
 
 
@@ -46,3 +46,9 @@ def test_style_name():
 
     with pytest.raises(StyleNotFoundError):
         name = get_style_name('non-existent-style')
+
+
+def test_list_all_styles():
+    """Test listing styles."""
+    styles = get_all_styles()
+    assert "Journal of Applied Animal Research" in styles.values()
