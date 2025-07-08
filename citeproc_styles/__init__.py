@@ -10,11 +10,11 @@
 
 from __future__ import absolute_import, print_function
 
+import importlib.resources
 import os
 import sys
 
 from lxml.etree import iterparse
-from pkg_resources import resource_exists, resource_filename, resource_listdir
 from six import reraise as raise_
 
 from .errors import StyleDependencyError, StyleNotFoundError
@@ -62,6 +62,27 @@ def _resolve_dependent_style(style_path):
                                 .format(style_path)), None, stacktrace)
 
 
+def _resource_exists(resource):
+    """Tests if a resource exists within this package."""
+    resource_path = importlib.resources.files("citeproc_styles") / resource
+    return resource_path.is_file()
+
+
+def _resource_filename(resource):
+    """Get resource file name."""
+    resource_path = importlib.resources.files("citeproc_styles") / resource
+    with importlib.resources.as_file(resource_path) as f:
+        # note: this will fail if the resource is not a file,
+        # for example inside zip
+        return str(f)
+
+
+def _resource_listdir(resource):
+    """List the contents of a resource directory."""
+    resource_path = importlib.resources.files("citeproc_styles") / resource
+    return [str(f) for f in resource_path.iterdir() if f.is_file()]
+
+
 def get_style_filepath(style, resolve_dependencies=True):
     """Get the full path of a style file.
 
@@ -71,19 +92,19 @@ def get_style_filepath(style, resolve_dependencies=True):
     :returns: Filepath of a .csl style file.
     """
     independent_style = os.path.join(independent_dir, '{0}.csl'.format(style))
-    if resource_exists(__name__, independent_style):
-        return resource_filename(__name__, independent_style)
+    if _resource_exists(independent_style):
+        return _resource_filename(independent_style)
 
     dependent_style = os.path.join(dependent_dir, '{0}.csl'.format(style))
-    if resource_exists(__name__, dependent_style):
-        style_path = resource_filename(__name__, dependent_style)
+    if _resource_exists(dependent_style):
+        style_path = _resource_filename(dependent_style)
 
         if resolve_dependencies:
             inner_style = _resolve_dependent_style(style_path)
             inner_style = os.path.join(independent_dir,
                                        '{0}.csl'.format(inner_style))
-            if resource_exists(__name__, inner_style):
-                return resource_filename(__name__, inner_style)
+            if _resource_exists(inner_style):
+                return _resource_filename(inner_style)
             else:
                 raise StyleNotFoundError(
                     'The independent style {0} was not found.'
@@ -123,7 +144,7 @@ def get_all_styles():
     """
     styles = {}
     for styles_dir in (independent_dir, dependent_dir):
-        style_files = (s for s in resource_listdir(__name__, styles_dir)
+        style_files = (s for s in _resource_listdir(styles_dir)
                        if s.endswith('.csl'))
         style_names = (s.replace('.csl', '') for s in style_files)
         styles.update({s: get_style_name(s)
