@@ -1,0 +1,11 @@
+runs:
+  using: composite
+  steps:
+    - name: Init GIT submodule
+      shell: bash
+      run: |
+        git submodule update --init --recursive
+    - name: install deps
+      shell: bash
+      run: |
+        sudo apt-get install libxml2-dev libxslt1-dev
