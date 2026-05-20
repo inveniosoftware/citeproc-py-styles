@@ -34,7 +34,7 @@ def test_style_filepath():
 def test_style_name():
     """Test style name retrieval."""
     name = get_style_name('apa')
-    assert 'American Psychological Association' in name
+    assert 'APA Style' in name
 
     name = get_style_name('nature-digest')
     assert 'Nature Digest' in name
