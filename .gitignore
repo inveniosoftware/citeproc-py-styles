@@ -66,3 +66,4 @@ examples/data/upload/*
 
 # temporary db
 tests/*.db
+uv.lock
