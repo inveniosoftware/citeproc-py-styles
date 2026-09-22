@@ -38,10 +38,7 @@ dynamic = ["version"]
 Homepage = "https://github.com/inveniosoftware/citeproc-py-styles"
 
 [project.optional-dependencies]
-all = [
-  "pytest-invenio>=1.4.0",
-  "pytest-invenio>=1.4.0",
-]
+# CI checks, for dev use
 tests = [
   "pytest-invenio>=1.4.0",
 ]
