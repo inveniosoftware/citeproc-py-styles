@@ -3,8 +3,6 @@
 
 """CSL styles."""
 
-from __future__ import absolute_import, print_function
-
 import importlib.resources
 import os
 import sys

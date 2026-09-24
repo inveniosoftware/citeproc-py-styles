@@ -3,8 +3,6 @@
 
 """CSL styles exceptions."""
 
-from __future__ import absolute_import, print_function
-
 
 class StyleNotFoundError(Exception):
     """Style not found error."""
