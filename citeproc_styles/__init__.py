@@ -1,16 +1,13 @@
 # SPDX-FileCopyrightText: 2016-2018 CERN.
+# SPDX-FileCopyrightText: 2026 CESNET z.s.p.o.
 # SPDX-License-Identifier: MIT
 
 """CSL styles."""
 
-from __future__ import absolute_import, print_function
-
 import importlib.resources
 import os
-import sys
 
 from lxml.etree import iterparse
-from six import reraise as raise_
 
 from .errors import StyleDependencyError, StyleNotFoundError
 from .version import __version__
@@ -40,6 +37,7 @@ def _resolve_dependent_style(style_path):
         `CSL Specification
          <http://docs.citationstyles.org/en/stable/specification.html#file-types>`_
     """
+    error_msg = 'Dependent style {0} could not be parsed'.format(style_path)
     try:
         # The independent style is mentioned inside a link element of
         # the form 'http://www.stylesite.com/stylename'.
@@ -47,14 +45,12 @@ def _resolve_dependent_style(style_path):
             if el.attrib.get('rel') == 'independent-parent':
                 url = el.attrib.get('href')
                 return url.rsplit('/', 1)[1]
-    except Exception:
-        # Invalid XML, missing info, etc. Preserve the original exception.
-        stacktrace = sys.exc_info()[2]
-    else:
-        stacktrace = None
+    except Exception as exc:
+        # Invalid XML, missing info, etc. Chain the original exception.
+        raise StyleDependencyError(error_msg) from exc
 
-    raise_(StyleDependencyError('Dependent style {0} could not be parsed'
-                                .format(style_path)), None, stacktrace)
+    # Parsed fine, but no independent-parent link was found.
+    raise StyleDependencyError(error_msg)
 
 
 def _resource_exists(resource):
