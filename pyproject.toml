@@ -6,7 +6,7 @@
 [project]
 name = "citeproc-py-styles"
 description = "CSL styles."
-readme = "README.rst"
+readme = "README.md"
 license = "MIT"
 authors = [
   { name = "CERN", email = "info@inveniosoftware.org" },
@@ -66,6 +66,6 @@ profile = "black"
 add_ignore = "D401"
 
 [tool.pytest.ini_options]
-addopts = '--isort --pydocstyle --pycodestyle --doctest-glob="*.rst" --doctest-modules --cov=citeproc_styles --cov-report=term-missing'
+addopts = '--isort --pydocstyle --pycodestyle --doctest-modules --cov=citeproc_styles --cov-report=term-missing'
 testpaths = "tests citeproc_py_styles"
 live_server_scope = "module"
